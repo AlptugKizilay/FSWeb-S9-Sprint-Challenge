@@ -29,7 +29,7 @@ export default function AppFunctional(props) {
     [2,3],
     [3,3],
   ]
-  const errorMassage = ["left"]
+  const [massage,setMassage] = useState();
   const [result, setResult] = useState(initial);
 
   function getXY() {
@@ -41,7 +41,7 @@ export default function AppFunctional(props) {
     // Koordinatları almak için yukarıdaki "getXY" helperını ve ardından "getXYMesaj"ı kullanabilirsiniz.
     // tamamen oluşturulmuş stringi döndürür.
     
-    return errorMassage[0];
+    return massage;
   }
 
   function reset() {
@@ -77,7 +77,7 @@ export default function AppFunctional(props) {
   }
 
   function onSubmit(evt) {
-    // payloadu POST etmek için bir submit handlera da ihtiyacınız var.
+
     evt.preventDefault();
     const data = {
       "x": grid[result.index][0],
@@ -90,11 +90,15 @@ export default function AppFunctional(props) {
       .post("http://localhost:9000/api/result", data)
       .then((res)=>{
         console.log(res.data)
+        setMassage(res.data.message);
       })
   }
   useEffect(()=>{
     console.log("result", result); 
   },[result])
+  useEffect(()=>{
+    getXYMesaj();
+  },[massage])
 
   return (
     <div id="wrapper" className={props.className}>
